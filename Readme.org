@@ -1,0 +1,41 @@
+* Commentary
+Bitcoin donations gratefully accepted: 1ArFina3Mi8UDghjarGqATeBgXRDWrsmzo
+
+* Installation
+To install:
+
+ - Put the library in a directory in the emacs load path, like ~/.emacs.d/
+ - Add (require 'gptel-jb-extras) in your ~/.emacs file
+* Commands & keybindings
+
+ Below is a complete list of commands:
+
+   - *gptel-show-outline* :
+    Show an outline of prompts and org-headings in the current chat buffer.\\
+    Keybinding: =M-x gptel-show-outline=
+   - *gptel-insert-prompt-prefix-string* :
+    Insert the prompt prefix at the start of the line.\\
+    Keybinding: =M-x gptel-insert-prompt-prefix-string=
+   - *gptel-insert-response-prefix-string* :
+    Insert the response prefix at the start of the line.\\
+    Keybinding: =M-x gptel-insert-response-prefix-string=
+   - *gptel-add-prompt-labels* :
+    Insert labels at the start of lines following each prompt.\\
+    Keybinding: =M-x gptel-add-prompt-labels=
+   - *gptel-remove-prompt-labels* :
+    Remove prompt labels in the current gptel buffer that match  - *gptel-label-format* :.\\
+    Keybinding: =M-x gptel-remove-prompt-labels=
+   - *gptel-refactor-buffer* :
+    Rearrange Q&A pairs in the current gptel buffer per ORDER.\\
+    Keybinding: =M-x gptel-refactor-buffer=
+   - *fastgpt-query* :
+    Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer.\\
+    Keybinding: =C-M-S-s-f=
+
+* Customizable Options
+
+ Below is a list of customizable options:
+
+   - *gptel-label-format* :
+    Format string for labels used by  - *gptel-add-prompt-labels* :.\\
+    default value: =Q%d) =
