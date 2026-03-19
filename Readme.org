@@ -10,6 +10,15 @@ To install:
 
  Below is a complete list of commands:
 
+   - *gptel-set-log-level* :
+    Prompt the user to set the VALUE of  - *gptel-log-level* :.\\
+    Keybinding: =M-x gptel-set-log-level=
+   - *gptel-display-log* :
+    Display the *gptel-log* buffer.\\
+    Keybinding: =M-x gptel-display-log=
+   - *gptel-display-or-set-log* :
+    Display the *gptel-log* buffer or set the value of  - *gptel-log-level* :.\\
+    Keybinding: =M-x gptel-display-or-set-log=
    - *gptel-show-outline* :
     Show an outline of prompts and org-headings in the current chat buffer.\\
     Keybinding: =M-x gptel-show-outline=

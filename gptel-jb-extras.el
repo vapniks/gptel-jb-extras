@@ -6,10 +6,10 @@
 ;; Maintainer: Joe Bloggs <vapniks@yahoo.com>
 ;; Copyleft (Ↄ) 2026, Joe Bloggs, all rites reversed.
 ;; Created: 2026-03-18 01:56:24
-;; Version: 0.1
-;; Last-Updated: Wed Mar 18 02:03:26 2026
+;; Version: 20260319.2347
+;; Last-Updated: Thu Mar 19 23:47:29 2026
 ;;           By: Joe Bloggs
-;;     Update #: 1
+;;     Update #: 2
 ;; URL: https://github.com/vapniks/gptel-jb-extras
 ;; Keywords: convenience
 ;; Compatibility: GNU Emacs 30.1
@@ -45,11 +45,7 @@
 ;; Bitcoin donations gratefully accepted: 1ArFina3Mi8UDghjarGqATeBgXRDWrsmzo
 ;; 
 ;;; Installation
-;; 
-;; To make sure you have the most up-to-date version of this library it is best to install 
-;; using the emacs package system, with the appropriate repository added (e.g https://melpa.org/)
-;; 
-;; To install without using a package manager:
+;; To install:
 ;; 
 ;;  - Put the library in a directory in the emacs load path, like ~/.emacs.d/
 ;;  - Add (require 'gptel-jb-extras) in your ~/.emacs file
@@ -59,8 +55,17 @@
 ;;
 ;; Below is a complete list of commands:
 ;;
+;;  `gptel-set-log-level'
+;;    Prompt the user to set the VALUE of `gptel-log-level'.
+;;    Keybinding: M-x gptel-set-log-level
+;;  `gptel-display-log'
+;;    Display the *gptel-log* buffer.
+;;    Keybinding: M-x gptel-display-log
+;;  `gptel-display-or-set-log'
+;;    Display the *gptel-log* buffer or set the value of `gptel-log-level'.
+;;    Keybinding: M-x gptel-display-or-set-log
 ;;  `gptel-show-outline'
-;;    Show an outline of prompts and org-headings the current chat buffer.
+;;    Show an outline of prompts and org-headings in the current chat buffer.
 ;;    Keybinding: M-x gptel-show-outline
 ;;  `gptel-insert-prompt-prefix-string'
 ;;    Insert the prompt prefix at the start of the line.
@@ -115,6 +120,33 @@
 
 ;; REMEMBER TODO ;;;###autoload's 
 
+;;;###autoload
+(defun gptel-set-log-level (value)
+  "Prompt the user to set the VALUE of `gptel-log-level'."
+  (interactive (list (ido-completing-read "Set logging level: "
+					  '("No logging" "Limited" "Full"))))
+  (cond ((equal value "No logging")
+	 (setq gptel-log-level nil))
+	((equal value "Limited")
+	 (setq gptel-log-level 'info))
+	((equal value "Full")
+	 (setq gptel-log-level 'debug))))
+;;;###autoload
+(defun gptel-display-log nil
+  "Display the *gptel-log* buffer."
+  (interactive)
+  (if (get-buffer "*gptel-log*")
+      (display-buffer "*gptel-log*")
+    (message "No *gptel-log* buffer found")))
+;;;###autoload
+(defun gptel-display-or-set-log (arg)
+  "Display the *gptel-log* buffer or set the value of `gptel-log-level'.
+If called with a prefix arg then prompt the user to set the value of `gptel-log-level',
+otherwise display the *gptel-log* buffer."
+  (interactive "P")
+  (if arg
+      (call-interactively 'gptel-set-log-level)
+    (call-interactively 'gptel-display-log)))
 ;;;###autoload
 (defun gptel-show-outline nil
   "Show an outline of prompts and org-headings in the current chat buffer."
