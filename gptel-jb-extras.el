@@ -143,34 +143,39 @@ the user prompts from the start of the buffer, so it should contain a single %d.
   "Insert labels at the start of lines following each prompt.
 By default labels are created using `gptel-label-format' (which see).
 When QUERY is non-nil, prompt the user at each replacement.
-START is the starting number for the prompt counter (defaults to 1)."
+START is the starting number for the prompt counter (defaults to 1).
+When called interactively with a prefix argument `gptel-remove-prompt-labels' will
+be called instead."
   (interactive
    (when (memq 'gptel-mode local-minor-modes)
      (list (y-or-n-p "Query each replacement? ")
            (read-number "Start from: " 1))))
-  (if (not (memq 'gptel-mode local-minor-modes))
-      (message "This is not a gptel-mode buffer.")
-    (goto-char (point-min))
-    (let ((counter (or start 1))
-          (pattern (regexp-quote (gptel-prompt-prefix-string))))
-      (while (re-search-forward pattern nil t)
-	(let* ((match (match-string 0))
-	       (replacement (concat match (format gptel-label-format counter))))
-          (if query
-	      (pcase (read-char-choice
-		      (format "Replace with %d? (y/n/e/!/q) " counter)
-		      '(?y ?n ?e ?! ?q))
-		(?y (replace-match replacement t t)
-                    (setq counter (1+ counter)))
-		(?n nil)
-		(?e (let ((custom (read-string "Insert string: ")))
-		      (replace-match (concat match custom ") ") t t)
-		      (setq counter (1+ counter))))
-		(?! (replace-match replacement t t)
-                    (setq counter (1+ counter) query nil))
-		(?q (goto-char (point-max))))
-            (replace-match replacement t t)
-            (setq counter (1+ counter))))))))
+  (if (and current-prefix-arg
+	   (called-interactively-p 'interactive))
+      (call-interactively 'gptel-remove-prompt-labels)
+    (if (not (memq 'gptel-mode local-minor-modes))
+	(message "This is not a gptel-mode buffer.")
+      (goto-char (point-min))
+      (let ((counter (or start 1))
+            (pattern (regexp-quote (gptel-prompt-prefix-string))))
+	(while (re-search-forward pattern nil t)
+	  (let* ((match (match-string 0))
+		 (replacement (concat match (format gptel-label-format counter))))
+            (if query
+		(pcase (read-char-choice
+			(format "Replace with %d? (y/n/e/!/q) " counter)
+			'(?y ?n ?e ?! ?q))
+		  (?y (replace-match replacement t t)
+		      (setq counter (1+ counter)))
+		  (?n nil)
+		  (?e (let ((custom (read-string "Insert string: ")))
+			(replace-match (concat match custom ") ") t t)
+			(setq counter (1+ counter))))
+		  (?! (replace-match replacement t t)
+		      (setq counter (1+ counter) query nil))
+		  (?q (goto-char (point-max))))
+	      (replace-match replacement t t)
+	      (setq counter (1+ counter)))))))))
 ;;;###autoload
 (defun gptel-remove-prompt-labels (&optional query format)
   "Remove prompt labels in the current gptel buffer that match `gptel-label-format'.
