@@ -242,7 +242,7 @@ If QUERY is non-nil prompt the user before removing each label."
   "Rearrange Q&A pairs in the current gptel buffer per ORDER.
 ORDER is a list of integers indicating the desired sequence of Q&A pairs.
 HEADERS is a sequence of lists of cons cells (Q-NUM . TEXT).
-The first list specifies depth-1 org headers (* TEXT), the second
+The first list specifies depth-1 org-headers (* TEXT), the second
 depth-2 (** TEXT), etc.  A Q&A pair may appear in multiple header lists;
 headers are written out in depth order before the pair.
 Results are displayed in a new buffer with `gptel-mode' enabled and

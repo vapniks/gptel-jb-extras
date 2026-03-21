@@ -1,0 +1,53 @@
+All of the text previous to this is part of a conversation I have been having with you (recall that you are an LLM), using gptel in an =org-mode= buffer in emacs. Each user prompt/question I have asked is prefixed by "QN)" where N is a number to indicating its order in the buffer (starting at 1). I have set the =gptel-org-branching-context= option on. Here is the documentation for =gptel-org-branching-context= (indented text):
+
+   Use the lineage of the current heading as the context for gptel in Org buffers.
+   
+   This makes each same level heading a separate conversation branch.
+   
+   By default, gptel uses a linear context: all the text up to the
+   cursor is sent to the LLM.  Enabling this option makes the
+   context the hierarchical lineage of the current Org heading.  In
+   this example:
+   
+   -----
+   Top level text
+   
+   * Heading 1
+   heading 1 text
+   
+   * Heading 2
+   heading 2 text
+   
+   ** Heading 2.1
+   heading 2.1 text
+   ** Heading 2.2
+   heading 2.2 text
+   -----
+   
+   With the cursor at the end of the buffer, the text sent to the LLM will be limited to
+   
+   -----
+   Top level text
+   
+   * Heading 2
+   heading 2 text
+   
+   ** Heading 2.2
+   heading 2.2 text
+   -----
+   
+   This makes it feasible to have multiple conversation branches.
+
+
+I have not yet made any org-mode headers in this buffer.
+Some topics of conversation may have been finished, and then restarted at a later point after a gap.
+I want you to perform two tasks for me:
+ 1) Tell me how to reorder the Q&A pairs (i.e. a user prompt/question and corresponding answer/response from you) so that all Q&A pairs corresponding to the same topic form a contiguous sequence.
+ 2) Tell me how to structure the previous text using org-headers to produce a well organized tree, bearing in mind that gptel-org-branching-context is turned on.
+
+I want you to produce your solution to these 2 tasks as a call to an elisp function I created called =gptel-refactor-buffer=.
+This function takes a list of integers as its first argument which should be a solution to task 1. For its second (optional) argument it takes a list of cons cells of the form (N . STR) where N is the number of a Q&A pair where a level-one org-header should be placed, and STR is the string to place after the * of the org-header. Its third (optional) argument is like the second argument but for level-two org-headers. Its fourth (optional) argument is for level-three org-headers, etc.
+For example if your solution to task one is the ordering: 1 4 5 3 2 7 10, and your solution to task 2 is to have level-one headers before Q&A pairs 1 & 2, and a level-two header before Q&A pair 5 then you should write:
+(gptel-refactor-buffer '(1 4 5 3 2 7 10) '((1 . "header 1") (2 . "header 2")) '((5 . "header 1b")))
+
+If you have any questions before you want to perform this task, please ask them now.
