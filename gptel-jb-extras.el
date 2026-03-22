@@ -328,6 +328,79 @@ text properties preserved."
           (goto-char (point-min))))
       (switch-to-buffer-other-window buf))))
 ;;;###autoload
+(defun gptel-recalculate-bounds ()
+  "Recalculate gptel response boundaries from prefix strings.
+Scans the buffer for prompt and response prefix strings (from
+`gptel-prompt-prefix-string' and `gptel-response-prefix-string'),
+clears existing gptel text properties, and reapplies them based
+on the prefix positions.
+When prompt and response prefixes are identical, they are assumed
+to alternate starting with a user prompt.
+If in an Org buffer, the properties drawer is updated via
+`gptel-org--save-state'.  If `gptel-highlight-mode' is active,
+response highlighting is refreshed."
+  (interactive)
+  (save-excursion
+    (save-restriction
+      (widen)
+      (let* ((prompt-prefix (gptel-prompt-prefix-string))
+             (response-prefix (gptel-response-prefix-string))
+             (same-prefix-p (string= prompt-prefix response-prefix))
+             (prompt-re
+              (concat "^" (regexp-quote
+                           (string-trim-left prompt-prefix "\n+"))))
+             (response-re
+              (concat "^" (regexp-quote
+                           (string-trim-left response-prefix "\n+"))))
+             (combined-re
+              (if same-prefix-p prompt-re
+                (concat "\\(" response-re "\\)\\|\\(" prompt-re "\\)")))
+             (markers nil)
+             (new-bounds nil))
+        ;; Pass 1: find all prefixes and classify as prompt or response
+        (goto-char (point-min))
+        (if same-prefix-p
+            (let ((is-response nil))
+              (while (re-search-forward combined-re nil t)
+                (push (list (match-beginning 0) (match-end 0)
+                            (if is-response 'response 'prompt))
+                      markers)
+                (setq is-response (not is-response))))
+          (while (re-search-forward combined-re nil t)
+            (push (list (match-beginning 0) (match-end 0)
+                        (if (match-beginning 1) 'response 'prompt))
+                  markers)))
+        (setq markers (nreverse markers))
+        ;; Pass 2: response region runs from end of response prefix
+        ;; to beginning of next prefix (or point-max)
+        (let ((rest markers))
+          (while rest
+            (pcase-let ((`(,_beg ,end ,type) (pop rest)))
+              (when (eq type 'response)
+                (push (list end (if rest (caar rest) (point-max)))
+                      new-bounds)))))
+        (setq new-bounds (nreverse new-bounds))
+        ;; Clear old properties and apply corrected ones
+        (with-silent-modifications
+          (remove-text-properties
+           (point-min) (point-max)
+           '(gptel nil front-sticky nil))
+          (dolist (bound new-bounds)
+            (add-text-properties
+             (car bound) (cadr bound)
+             '(gptel response front-sticky (gptel)))))
+        ;; Update properties drawer in Org buffers
+        (when (derived-mode-p 'org-mode)
+          (gptel-org--save-state))
+        ;; Refresh highlighting if gptel-highlight-mode is active
+        (when (bound-and-true-p gptel-highlight-mode)
+          (remove-overlays (point-min) (point-max) 'gptel-highlight t)
+          (gptel-highlight--update (point-min) (point-max)))
+        (message "Recalculated %d response region(s)."
+                 (length new-bounds))))))
+
+;; NOT SURE IF THE FOLLOWING COMMAND IS REALLY NEEDED
+;;;###autoload
 (defun fastgpt-query (query)
   "Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer."
   (interactive "sFastGPT query: ")
