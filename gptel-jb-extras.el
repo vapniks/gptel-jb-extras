@@ -6,10 +6,10 @@
 ;; Maintainer: Joe Bloggs <vapniks@yahoo.com>
 ;; Copyleft (Ↄ) 2026, Joe Bloggs, all rites reversed.
 ;; Created: 2026-03-18 01:56:24
-;; Version: 20260319.2347
-;; Last-Updated: Thu Mar 19 23:47:29 2026
+;; Version: 20260322.56
+;; Last-Updated: Sun Mar 22 00:56:33 2026
 ;;           By: Joe Bloggs
-;;     Update #: 2
+;;     Update #: 3
 ;; URL: https://github.com/vapniks/gptel-jb-extras
 ;; Keywords: convenience
 ;; Compatibility: GNU Emacs 30.1
@@ -82,6 +82,9 @@
 ;;  `gptel-refactor-buffer'
 ;;    Rearrange Q&A pairs in the current gptel buffer per ORDER.
 ;;    Keybinding: M-x gptel-refactor-buffer
+;;  `gptel-recalculate-bounds'
+;;    Recalculate gptel response boundaries from prefix strings.
+;;    Keybinding: M-x gptel-recalculate-bounds
 ;;  `fastgpt-query'
 ;;    Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer.
 ;;    Keybinding: C-M-S-s-f

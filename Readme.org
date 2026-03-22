@@ -41,7 +41,52 @@ To install:
     Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer.\\
     Keybinding: =C-M-S-s-f=
 
+* Customizable Options* Commands & keybindings
+
+ Below is a complete list of commands:
+
+   - *gptel-set-log-level* :
+    Prompt the user to set the VALUE of  - *gptel-log-level* :.\\
+    Keybinding: =M-x gptel-set-log-level=
+   - *gptel-display-log* :
+    Display the *gptel-log* buffer.\\
+    Keybinding: =M-x gptel-display-log=
+   - *gptel-display-or-set-log* :
+    Display the *gptel-log* buffer or set the value of  - *gptel-log-level* :.\\
+    Keybinding: =M-x gptel-display-or-set-log=
+   - *gptel-show-outline* :
+    Show an outline of prompts and org-headings in the current chat buffer.\\
+    Keybinding: =M-x gptel-show-outline=
+   - *gptel-insert-prompt-prefix-string* :
+    Insert the prompt prefix at the start of the line.\\
+    Keybinding: =M-x gptel-insert-prompt-prefix-string=
+   - *gptel-insert-response-prefix-string* :
+    Insert the response prefix at the start of the line.\\
+    Keybinding: =M-x gptel-insert-response-prefix-string=
+   - *gptel-add-prompt-labels* :
+    Insert labels at the start of lines following each prompt.\\
+    Keybinding: =M-x gptel-add-prompt-labels=
+   - *gptel-remove-prompt-labels* :
+    Remove prompt labels in the current gptel buffer that match  - *gptel-label-format* :.\\
+    Keybinding: =M-x gptel-remove-prompt-labels=
+   - *gptel-refactor-buffer* :
+    Rearrange Q&A pairs in the current gptel buffer per ORDER.\\
+    Keybinding: =M-x gptel-refactor-buffer=
+   - *gptel-recalculate-bounds* :
+    Recalculate gptel response boundaries from prefix strings.\\
+    Keybinding: =M-x gptel-recalculate-bounds=
+   - *fastgpt-query* :
+    Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer.\\
+    Keybinding: =C-M-S-s-f=
+
 * Customizable Options
+
+ Below is a list of customizable options:
+
+   - *gptel-label-format* :
+    Format string for labels used by  - *gptel-add-prompt-labels* :.\\
+    default value: =Q%d) =
+
 
  Below is a list of customizable options:
 
