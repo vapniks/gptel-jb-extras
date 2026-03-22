@@ -222,6 +222,8 @@ If QUERY is non-nil prompt the user before removing each label."
   (if (not (memq 'gptel-mode local-minor-modes))
       (message "This is not a gptel-mode buffer.")
     (goto-char (point-min))
+    (when (and query (eq major-mode 'org-mode))
+      (org-fold-show-all))
     (let* ((promptprefix (regexp-quote (gptel-prompt-prefix-string)))
 	   (pattern (concat promptprefix
 			    "\\(" (replace-regexp-in-string
