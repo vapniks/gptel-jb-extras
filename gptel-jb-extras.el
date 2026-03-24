@@ -403,7 +403,25 @@ response highlighting is refreshed."
           (gptel-highlight--update (point-min) (point-max)))
         (message "Recalculated %d response region(s)."
                  (length new-bounds))))))
-
+;;;###autoload
+(defun gptel-add-outshine-comments-to-log nil
+  "Add comment strings to *gptel-log* buffer that work with `outshine-mode'."
+  (interactive)
+  (if (not (equal (buffer-name) gptel--log-buffer-name))
+      (error "Not in %s buffer" gptel--log-buffer-name)
+    (outshine-add-headers '(("{[ \t\n\r]*\"gptel\": \"request headers\",[ \t\n\r]*\"timestamp\": \"\\([^\"]*\\)\""
+			     1 "request headers [\\1]")
+			    ("{[ \t\n\r]*\"gptel\": \"request body\",[ \t\n\r]*\"timestamp\": \"\\([^\"]*\\)\""
+			     2 "request body [\\1]")
+			    ("{\"gptel\": \"request Curl command\",[ \t\n\r]*\"timestamp\": \"\\([^\"]*\\)\""
+			     2 "request curl command [\\1]")
+			    ("{[ \t\n\r]*\"gptel\": \"response headers\",[ \t\n\r]*\"timestamp\": \"\\([^\"]*\\)\""
+			     2 "response headers [\\1]")
+			    ("{[ \t\n\r]*\"gptel\": \"response body\",[ \t\n\r]*\"timestamp\": \"\\([^\"]*\\)\""
+			     2 "response body [\\1]")))
+    (when (called-interactively-p 'any)
+      (goto-char (point-min))
+      (outline-next-visible-heading 1))))
 ;; NOT SURE IF THE FOLLOWING COMMAND IS REALLY NEEDED
 ;;;###autoload
 (defun fastgpt-query (query)
