@@ -6,10 +6,10 @@
 ;; Maintainer: Joe Bloggs <vapniks@yahoo.com>
 ;; Copyleft (Ↄ) 2026, Joe Bloggs, all rites reversed.
 ;; Created: 2026-03-18 01:56:24
-;; Version: 20260322.56
-;; Last-Updated: Sun Mar 22 00:56:33 2026
+;; Version: 20260408.1325
+;; Last-Updated: Wed Apr  8 13:25:56 2026
 ;;           By: Joe Bloggs
-;;     Update #: 3
+;;     Update #: 4
 ;; URL: https://github.com/vapniks/gptel-jb-extras
 ;; Keywords: convenience
 ;; Compatibility: GNU Emacs 30.1
@@ -49,6 +49,20 @@
 ;; 
 ;;  - Put the library in a directory in the emacs load path, like ~/.emacs.d/
 ;;  - Add (require 'gptel-jb-extras) in your ~/.emacs file
+;;; Customizable Options
+;; 
+;;  Below is a list of customizable options:
+;; 
+;;    - *gptel-label-format* :
+;;     Format string for labels used by  - *gptel-add-prompt-labels* :.\\
+;;     default value: =Q%d) =
+;; 
+;; 
+;;  Below is a list of customizable options:
+;; 
+;;    - *gptel-label-format* :
+;;     Format string for labels used by  - *gptel-add-prompt-labels* :.\\
+;;     default value: =Q%d) =
 ;;;;;;;;
 
 ;;; Commands:
@@ -85,9 +99,15 @@
 ;;  `gptel-recalculate-bounds'
 ;;    Recalculate gptel response boundaries from prefix strings.
 ;;    Keybinding: M-x gptel-recalculate-bounds
+;;  `gptel-add-outshine-comments-to-log'
+;;    Add comment strings to *gptel-log* buffer that work with `outshine-mode'.
+;;    Keybinding: M-x gptel-add-outshine-comments-to-log
 ;;  `fastgpt-query'
 ;;    Query Kagi FastGPT with QUERY and display the response in *FastGPT* buffer.
 ;;    Keybinding: C-M-S-s-f
+;;  `gptel-remove-text-properties'
+;;    Remove 'gptel text property from selected region in buffer.
+;;    Keybinding: M-x gptel-remove-text-properties
 ;;
 ;;; Customizable Options:
 ;;
@@ -460,6 +480,13 @@ response highlighting is refreshed."
   			      (if (< needed maxlines)
   				  (window-resize win (- needed curlines))
   				(window-resize win (- maxlines curlines)))))))))))))
+
+;;;###autoload
+(defun gptel-remove-text-properties (begin end)
+  "Remove 'gptel text property from selected region in buffer.
+When called non-interactively BEGIN & END specify the buffer region to act on."
+  (interactive "r")
+  (remove-text-properties begin end '(gptel nil front-sticky nil)))
 
 (provide 'gptel-jb-extras)
 
